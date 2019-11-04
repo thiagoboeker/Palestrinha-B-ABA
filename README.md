@@ -260,7 +260,7 @@ O codigo acima parece OK, porem vamos pensar um pouco.. **Se mudarmos algo na im
 Entao agora temos que ter muito cuidado quando alterarmos FormasGeometricas, e mais cuidado ainda se descermos mais ainda na hierarquia. Isso se chama **Acomplamento** e é algo bastante perigoso.
 
 Falando agora de coesão.
-Coesão se da atraves da definiçao da responsabilidade de determinada funcao/classe, geralmente atribuimos responsabilidade a efeitos colaterais. Quando a funcao realiza mais de uma tarefa em sua chamada, significa que ela tem baixa coesão e deveriamos separa-la em mais de uma para isolar-mos melhor os efeitos colaterais.
+Coesão se da atraves da definiçao da responsabilidade de determinada funcao/classe, geralmente atribuimos responsabilidade a efeitos colaterais. Quando a funcao realiza mais de uma tarefa em sua chamada, significa que ela tem baixa coesão e deveriamos desmembra-la em mais de uma para isolar-mos melhor os efeitos colaterais causados.
 
 Entao o ideal é, **baixo acoplamento com alta coesão**.
 
@@ -354,7 +354,7 @@ Ao adotar o Behaviour como carro chefe para abstracoes de processos, nós por na
 ## FSM's - Finite State Machines
 
 FSM's ou Maquina de Estados Finitos nos ajudam a modelar comportamento de maneira a preservar um estado consistente. No caso de _*Maquina*_ acima, temos duas acoes que possivelmente vao alterar o estado da maquina, ligar e desligar. Chamaremos esses estados de _*ON*_ e _*OFF*_, **entao para o estado de _*OFF*_ como a nossa maquina deve responder a uma mensagem de acionamento? E caso ja esteja ligada?**
-Entao perceba que o comportamento/resposta da nossa maquina se dara atraves da mensagem que ela receber em conjunto com o seu estado atual naquele determinado ponto no tempo.
+Entao perceba que o comportamento/resposta da nossa maquina se dara atraves da mensagem que ela receber em conjunto com o seu estado atual naquele determinado ponto no tempo. Mas percebam tambem que o caso das FSM's pede implicitamente um ambiente com garantias de **thread safety**.
 
 ## Demonstracao de uma FSM
 
@@ -368,6 +368,7 @@ Entao perceba que o comportamento/resposta da nossa maquina se dara atraves da m
 - Apos alterar o estado deve esperar até 1 segundo para processar uma proxima mensagem(**Efeito Bounce**)
 - Apos algum comando inconsistente (Comando Ligar com estado ON) deve-se retornar uma mensagem de erro para o cliente e ignorar qualquer mensagem nos proximos 2 segundos
 - Garantir **thread safety**.
+- Apos decorrido o tempo definido em Duraion/0, a maquina deve atualizar o seu estado para _*OFF*_.
 
 #### Requisitos da Interface
 
