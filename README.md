@@ -170,10 +170,8 @@ Recursao é como tudo funciona, voce apenas nao ve!
 Recursao é o ato de chamar uma funcão dentro dela mesmo.
 
 ```elixir
-  def factorial(n), do: factorial(n, n)
+  def factorial(n), do: factorial(n - 1, n)
 
-  def factorial(n, n), do: factorial(n - 1, n * (n - 1))
-  
   def factorial(1, acc), do: acc
   
   def factorial(n, acc) do
