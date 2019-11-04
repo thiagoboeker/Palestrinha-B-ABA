@@ -187,7 +187,7 @@ Recursao é o ato de chamar uma funcão dentro dela mesmo.
   end
 ```
 
-Recursao tambem diz respeito a loop. Mas existe apenas um detalhe, **stacks** e **tail recursion**
+Recursao tambem diz respeito a loop. Mas existem apenas uns detalhes, **stacks** e **tail recursion**
 
 ```elixir
   def double_all(n) do
@@ -199,7 +199,7 @@ Recursao tambem diz respeito a loop. Mas existe apenas um detalhe, **stacks** e 
 ```
 
 O codigo acima representa a cena de um crime e voce deveria ser preso!
-O fato de voce ter uma chamada recursiva em uma funcao e ainda precisar de seu retorno no bloco de baixo da pilha, nao é nem um pouco otimizado e deixa o seu codigo mais lento, sem contar que voce corre o risco de **Stack Overflow**.
+O fato de voce ter uma chamada recursiva em uma funcao e ainda precisar de seu retorno no bloco de baixo da pilha, nao é nem um pouco otimizado e deixa o seu codigo mais lento, sem contar que voce corre o risco de **Stack Overflow**. Em sua grande maioria, compiladores/interpretadores estao preparados para otimizarem tail recursion.
 
 Para funcoes isso é tudo por enquanto!
 
