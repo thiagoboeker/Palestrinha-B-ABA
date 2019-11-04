@@ -87,7 +87,7 @@ Vamos melhorar.
   }
 ```
 
-Melhorou? O numero de argumentos de uma funcao é o que chamamos de **aridade**. É muito importante em linguagens funcionas que classificam suas funcoes por sua aridade. No geral devemos sempre manter nossas funcoes bem explicitas sobre o que ela espera e o que ela retorna, para nao confundir quem ira usa-las posteriormente. Isso tambem é muito importante para leitura e entedimento de **documentação**.
+Melhorou? O numero de argumentos de uma funcao é o que chamamos de **aridade**. É muito importante em linguagens funcionas que classificam suas funcoes por sua aridade. No geral devemos sempre manter nossas funcoes bem explicitas sobre o que elas esperam e o que elas retornam, para nao confundir quem ira usa-las posteriormente. Isso tambem é muito importante para leitura e entedimento de **documentação**.
 
 #### Composição
 
