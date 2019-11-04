@@ -35,9 +35,9 @@ defmodule Lavadora do
   @impl true
   def handle_call(:ligar, _from, state) do
     with {:ok, state} = data <- ligar(%{state: state, washer: self()}) do
-      {:reply, data, state, 1_000}
+      {:reply, data, state}
     else
-      error -> {:reply, error, state, 2_000}
+      error -> {:reply, error, state}
     end
   end
 
@@ -45,15 +45,10 @@ defmodule Lavadora do
   def handle_info(:desligar, state) do
     with {:ok, state} <- desligar(%{state: state, washer: self()}) do
       IO.inspect state
-      {:noreply, state, 1_000}
+      {:noreply, state}
     else
-      _ -> {:noreply, state, 2_000}
+      _ -> {:noreply, state}
     end
-  end
-
-  @impl true
-  def handle_info(:timeout, state) do
-    {:noreply, state}
   end
 
   @impl true
