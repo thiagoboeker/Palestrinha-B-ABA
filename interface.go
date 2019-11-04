@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-type pato interface {
+type Pato interface {
 	TemAsa() bool
 	AndaComoPato() bool
 	FazQuack() bool
@@ -31,7 +31,7 @@ func (p *Patinho) FazQuack() bool {
 }
 
 // QuackQuack Faz quack quack
-func QuackQuack(p pato) {
+func QuackQuack(p Pato) {
 	if p.AndaComoPato() && p.FazQuack() && p.TemAsa() {
 		fmt.Println("Quack Quack!")
 	}

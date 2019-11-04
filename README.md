@@ -42,23 +42,30 @@ Aqui vai um exemplo.
   operation(doubler, 2)
 ```
 
+**First Class Functions** significa basicamente que voce pode manipular funcoes livremente, voce pode por exemplo:
+
+- Atribuir a uma variavel
+- Retornar de uma outra funcao
+- Passar como parametro
+
 #### Puras
 
 Funcoes puras sao a melhor coisa do mundo, pena que quase nunca temos a chance de escreve-las.
-Uma funcao pura significa que para f(x) => y, y sera invariavel para o mesmo valor de x.
-Isso basicamente diz que para um mesmo parametro voce tera sempre o mesmo resultado. Funcoes puras nao geram **efeitos colaterais**.
+Uma funcao pura significa que para f(x) => y, y sera invariavel para o respectivo valor de x.
+Isso basicamente diz que para um mesmo parametro voce tera sempre o mesmo resultado. Podemos dizer que funcoes puras nao geram **efeitos colaterais**.
 
 #### Impuras
-As funcoes impuras por exemplo geram efeitos colaterais.
+As funcoes impuras por exemplo geram efeitos colaterais. Voce pode pensar como efeito colateral qualquer operacao que altere permanentemente o estado de determinado recurso. Mais comum pensar em operacoes de banco de dados por exemplo.
 
 #### Aridade e leitura
 
 Voce sabe o que é a aridade de uma funçao?
 
 ```go
-  // Explique para mim essa funcao
+  // Explique o que essa funcao possivelmente realiza
   func (c * Controller) create(w http.ResponseWriter, r * http.Request) {
     Model.create(r.body)
+    /*** impl ***/
   }
 ```
 
@@ -68,6 +75,7 @@ O nome é bem auto-explicativo e os parametros tambem, entao tudo fica muito fac
   // Explica essa daqui
   function do(w, r) {
     M.create(r.body)
+    /*** impl ***/
   }
 ```
 
@@ -75,11 +83,11 @@ Vamos melhorar.
 
 ```javascript
   const do = ({responseWriter, request}) => {
-    M.create(request.body)
+    Model.create(request.body)
   }
 ```
 
-Melhorou? O numero de argumentos de uma funcao é o que chamamos de **aridade**. É muito importante em linguagens funcionas que classificam suas funcoes por sua aridade. No geral devemos sempre manter nossas funcoes bem explicitas sobre o que ela espera e o que ela retorna, para nao confundir quem ira usa-las posteriormente.
+Melhorou? O numero de argumentos de uma funcao é o que chamamos de **aridade**. É muito importante em linguagens funcionas que classificam suas funcoes por sua aridade. No geral devemos sempre manter nossas funcoes bem explicitas sobre o que ela espera e o que ela retorna, para nao confundir quem ira usa-las posteriormente. Isso tambem é muito importante para leitura e entedimento de **documentação**.
 
 #### Composição
 
@@ -106,19 +114,18 @@ Instanciando o nosso serviço de cadastro.
 
 O operador **|>** basicamente passa o que esta ao lado esquerdo como primeiro parametro para a funcao ao lado direito. Entao user_param é passado para check_receita e logo depois o resultado da operaçao é passado para create_user.
 
-Muito bem, mas agora precisamos adicionar uma checage de cpf. E agora?
+Muito bem, mas agora precisamos adicionar uma checagem de cpf. E agora?
 
 ```elixir
-  user_param
-  |> check_receita()
+  {:ok, user_receita_ok} = check_receita(user_param)
 
-  cpf_check = check_cpf()
+  user_cpf_ok = check_cpf(user_receita_ok)
 
-  user = create_user()
+  user = create_user(user_cpf_ok)
 ```
 
 Nao, nao e nao!
-Precisamos montar a nossa funcionalidade de checar cpf no mesmo scopo do nosso pipeline.
+Precisamos montar a nossa funcionalidade de checar cpf no mesmo scopo do nosso pipeline, ela precisa se adequar a estrutura que ja esta implementada.
 
 ```elixir
   # Retorna `{:ok, user_param}` para usuario aceito.
@@ -128,6 +135,7 @@ Precisamos montar a nossa funcionalidade de checar cpf no mesmo scopo do nosso p
   # Retorna `{:ok, user_param}` para usuario ok.
   # Retorna `{:error, user_param}` para usuario com nome sujo.
   def check_cpf({:ok, user_param}), do: CPF.check(user_param)
+  def check_cpf({:error, _reason} = error), do: error
 
   # Retorna `{:ok, user}` para usuario criado com sucesso.
   def create_user({:ok, user_param}), do: Model.create(user_param)
@@ -173,7 +181,7 @@ Recursao é o ato de chamar uma funcão dentro dela mesmo.
   def factorial(n), do: factorial(n - 1, n)
 
   def factorial(1, acc), do: acc
-  
+
   def factorial(n, acc) do
     factorial(n - 1, n * acc)
   end
@@ -181,7 +189,7 @@ Recursao é o ato de chamar uma funcão dentro dela mesmo.
 
 Recursao tambem diz respeito a loop. Mas existe apenas um detalhe, **stacks** e **tail recursion**
 
-```elixir 
+```elixir
   def double_all(n) do
     2 * double_all(n - 1)
   end
@@ -191,29 +199,17 @@ Recursao tambem diz respeito a loop. Mas existe apenas um detalhe, **stacks** e 
 ```
 
 O codigo acima representa a cena de um crime e voce deveria ser preso!
-O fato de voce ter uma chamada recursiva em uma funcao e ainda precisar de seu retorno no bloco de cima da pilha, nao é nem um pouco otimizado e deixa o seu codigo mais lento, sem contar que voce corre o risco de **Stack Overflow**.
+O fato de voce ter uma chamada recursiva em uma funcao e ainda precisar de seu retorno no bloco de baixo da pilha, nao é nem um pouco otimizado e deixa o seu codigo mais lento, sem contar que voce corre o risco de **Stack Overflow**.
 
-```elixir
-  def double_all_tailrec(n, acc) do
-    double_all_tailrec(n - 1, acc * n)
-  end
-
-  def double_all_tailrec(1, acc), do: acc
-
-  # n = 2, acc = 2 => 2 * 2 = 4
-  # n = 1, acc = 4 => 4 * 1 = 4
-  dobule_all_tailrec(2, 2)
-```
-
-Para funcoes isso é tudo!
+Para funcoes isso é tudo por enquanto!
 
 ## Orientacao a Objeto
 
-Orientacao é o paradigma predominante em programacao, entao vamos falar dos seus conceitos principais.
+Orientacao a Objeto é o paradigma predominante em programacao, entao vamos falar dos seus conceitos principais.
 
 ### Classes
 
-Classes sao a estruturas de dados que nos possibilita trazer o dominio do problema da vida real pro codigo.
+Classe é a estrutura de dados que nos possibilita trazer o dominio do problema da vida real pro nosso codigo.
 
 ```javascript
   class Retangulo {
@@ -273,7 +269,7 @@ Entao o ideal é, **baixo acoplamento com alta coesão**.
 Interface voce pode pensar como **Herança de tipos**. Veja no exemplo:
 
 ```go
-  type pato interface {
+  type Pato interface {
     TemAsa() bool
     AndaComoPato() bool
     FazQuack() bool
@@ -302,29 +298,30 @@ Interface voce pode pensar como **Herança de tipos**. Veja no exemplo:
       fmt.Println("Nao sou um pato")
     }
   }
-  
+
   func main() {
     patito := Patinho{Nome: "Feio"}
-    QuackQuack(&patito) 
+    QuackQuack(&patito)
   }
 ```
 
-Quando voce falamos de interface podemos pensar em um modelo de **contratos**. Entao a interface _*pato*_ requisita que para assinar o seu contrato e herdar o seu tipo, a estrutura precisa implementar suas tres funcoes. Ocorrendo as implementacoes a estrutura herda o tipo _pato_. No caso acima _Patinho_ implementa as tres funcoes entao agora _Patinho_ tambem pode ser considerada um _pato_. Entao qualquer funcao que requisite um pato como parametro, poderemos passar _Patinho_. Agora imagine que tivessemos a classe _Cisne_ que tivesse:
+Quando falamos de interface podemos pensar em um modelo de **contratos**. Entao a interface _*pato*_ requisita que para assinar o seu contrato e herdar o seu tipo, a estrutura precisa implementar suas tres funcoes. Ocorrendo as implementacoes a estrutura herda o tipo _pato_. No caso acima _Patinho_ implementa as tres funcoes entao agora _Patinho_ tambem pode ser considerada um _pato_. Entao qualquer funcao que requisite um pato como parametro, poderemos passar _Patinho_. Agora imagine que tivessemos a classe _Cisne_ que tivesse:
 
 ```go
-  type Patinho struct {
+  type Cisne struct {
     Nome string
   }
 
-  func (p * Patinho) TemAsa() bool {
+  func (c * Cisne) TemAsa() bool {
     return true
   }
 
-  func (p * Patinho) AndaComoPato() bool {
+  func (c * Cisne) AndaComoPato() bool {
     return true
   }
 
-  func (p * Patinho) FazQuack() bool {
+  func (c * Cisne) FazQuack() bool {
+    // Cisne nao faz Quack
     return false
   }
 ```
@@ -333,11 +330,47 @@ Quando voce falamos de interface podemos pensar em um modelo de **contratos**. E
 
 #### Poliformismo
 
-Poliformismo é quando uma funcao da classe herdada tem diferentes implementaçoes nas classes que estao herdando. Nao vou adentrar muito em poliformismo porque
+Poliformismo é quando uma funcao da classe herdada tem diferentes implementaçoes nas classes que estao herdando. Nao vamos adentrar muito em poliformismo por agora.
 
 
+## Orientacao a Objeto x Behaviour
 
+Se eu disser pra voces esquecerem OOP e focar em **Behaviour**, voces topam?
 
+Behaviour é uma maneira incrivel de abstrair o dominio do problema pro seu codigo. Quando falar em Behaviour voce pode pensar em **Interfaces** que vimos anteriormente, o conceito é praticamente o mesmo, voce define o que aquele recurso precisa implementar para afirmar que aquele recurso tem o **comportamento** definido pelo Behaviour.
 
+```elixir
+defmodule Maquina do
+  @callback ligar(term) :: {:ok, term} | {:error, String.t}
+  @callback desligar(term) :: {:ok, term} | {:error, String.t}
+  @callback duration() :: Integer.t
+end
+```
 
+No exemplo acima definimos o Behaviour _*Maquina*_, e dissemos que para um recurso/modulo ser considerado uma Maquina em nosso sistema, ele precisa obrigatoriamente implementar esses 3 metodos, gerando até mesmo um erro de compilacao caso contrario.
 
+Ao adotar o Behaviour como carro chefe para abstracoes de processos, nós por natureza ganhamos acesso a outro conceito muito poderoso. As FSM's
+
+## FSM's - Finite State Machines
+
+FSM's ou Maquina de Estados Finitos nos ajudam a modelar comportamento de maneira a preservar um estado consistente. No caso de _*Maquina*_ acima, temos duas acoes que possivelmente vao alterar o estado da maquina, ligar e desligar. Chamaremos esses estados de _*ON*_ e _*OFF*_, **entao para o estado de _*OFF*_ como a nossa maquina deve responder a uma mensagem de acionamento? E caso ja esteja ligada?**
+Entao perceba que o comportamento/resposta da nossa maquina se dara atraves da mensagem que ela receber em conjunto com o seu estado atual naquele determinado ponto no tempo.
+
+## Demonstracao de uma FSM
+
+![Demonstracao](demonstration.jpg)
+
+## Desafio da Lavadora
+
+#### Requisitos basicos
+
+- Definir 2 estados: ON e OFF
+- Apos alterar o estado deve esperar até 1 segundo para processar uma proxima mensagem(**Efeito Bounce**)
+- Apos algum comando inconsistente (Comando Ligar com estado ON) deve-se retornar uma mensagem de erro para o cliente e ignorar qualquer mensagem nos proximos 2 segundos
+- Garantir **thread safety**.
+
+#### Requisitos da Interface
+
+- Ligar(opts) :: Comando de ligar
+- Desligar(opts) :: Comando de desligar
+- Duration :: Duracao da lavagem
