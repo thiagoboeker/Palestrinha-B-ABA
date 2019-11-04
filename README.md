@@ -39,7 +39,7 @@ Aqui vai um exemplo.
   }
 
   // 4
-  operation(doubler, 2)
+  operation(doubler(), 2)
 ```
 
 **First Class Functions** significa basicamente que voce pode manipular funcoes livremente, voce pode por exemplo:
