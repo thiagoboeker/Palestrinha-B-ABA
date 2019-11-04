@@ -3,13 +3,14 @@
 ### Funcoes
 
 Funcoes sao uma peça chave para realizar o ato de programar, e qualquer linguagem pode ser avaliada qualitativamente pelo jeito que emprega as funcões em sua estrutura.
-Funcoes podem ser:
 
 > f(x) = ax + b
 
+Funcoes podem ser:
+
 #### Cidadaos de primeira linha:
 
-Aqui vai um exemplo?
+Aqui vai um exemplo.
 
 ```scala
 
@@ -44,7 +45,7 @@ Aqui vai um exemplo?
 #### Puras
 
 Funcoes puras sao a melhor coisa do mundo, pena que quase nunca temos a chance de escreve-las.
-Uma funcao significa pura que para f(x) => y, y sera invariavel para o mesmo valor de x.
+Uma funcao pura significa que para f(x) => y, y sera invariavel para o mesmo valor de x.
 Isso basicamente diz que para um mesmo parametro voce tera sempre o mesmo resultado. Funcoes puras nao geram **efeitos colaterais**.
 
 #### Impuras
@@ -61,7 +62,7 @@ Voce sabe o que é a aridade de uma funçao?
   }
 ```
 
-O nome é bem auto-explicativo, os parametros tambem entao tudo fica muito facil, mas e quando nao for? Como voce le uma funcao?
+O nome é bem auto-explicativo e os parametros tambem, entao tudo fica muito facil, mas e quando nao for?
 
 ```javascript
   // Explica essa daqui
@@ -78,7 +79,7 @@ Vamos melhorar.
   }
 ```
 
-Melhorou? O numero de argumentos de uma funcao é o que chamamos de **aridade**. É muito importante em linguagens funcionas que classificam suas funcoes por sua aridade. No geral devemos sempre manter nossas funcoes bem explicitas sobre o que ela espera e o que ela retorna, para nao confundir que ira usa-las posteriormente.
+Melhorou? O numero de argumentos de uma funcao é o que chamamos de **aridade**. É muito importante em linguagens funcionas que classificam suas funcoes por sua aridade. No geral devemos sempre manter nossas funcoes bem explicitas sobre o que ela espera e o que ela retorna, para nao confundir quem ira usa-las posteriormente.
 
 #### Composição
 
