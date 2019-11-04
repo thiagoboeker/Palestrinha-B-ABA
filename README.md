@@ -1,0 +1,344 @@
+## O B-A-BA da programação
+
+### Funcoes
+
+Funcoes sao uma peça chave para realizar o ato de programar, e qualquer linguagem pode ser avaliada qualitativamente pelo jeito que emprega as funcões em sua estrutura.
+Funcoes podem ser:
+
+> f(x) = ax + b
+
+#### Cidadaos de primeira linha:
+
+Aqui vai um exemplo?
+
+```scala
+
+  // Cria uma funcao
+  def double(i: Int) {
+    2 * i
+  }
+
+  // Assina uma funcao em uma variavel
+  val doubler = (i: Int) => 2 * i
+
+  // Retorna uma funcao
+  def doubler() {
+    (i: Int) => 2 * i
+  }
+
+  // Assina uma funcao para uma variavel
+  val doublerFunc = doubler()
+
+  // 4
+  doublerFunc(2)
+
+  // Recebe uma funcao como parametro
+  def operation(operateFunc: (Int) => Int, item: Int) {
+    operateFunc(item)
+  }
+
+  // 4
+  operation(doubler, 2)
+```
+
+#### Puras
+
+Funcoes puras sao a melhor coisa do mundo, pena que quase nunca temos a chance de escreve-las.
+Uma funcao significa pura que para f(x) => y, y sera invariavel para o mesmo valor de x.
+Isso basicamente diz que para um mesmo parametro voce tera sempre o mesmo resultado. Funcoes puras nao geram **efeitos colaterais**.
+
+#### Impuras
+As funcoes impuras por exemplo geram efeitos colaterais.
+
+#### Aridade e leitura
+
+Voce sabe o que é a aridade de uma funçao?
+
+```go
+  // Explique para mim essa funcao
+  func (c * Controller) create(w http.ResponseWriter, r * http.Request) {
+    Model.create(r.body)
+  }
+```
+
+O nome é bem auto-explicativo, os parametros tambem entao tudo fica muito facil, mas e quando nao for? Como voce le uma funcao?
+
+```javascript
+  // Explica essa daqui
+  function do(w, r) {
+    M.create(r.body)
+  }
+```
+
+Vamos melhorar.
+
+```javascript
+  const do = ({responseWriter, request}) => {
+    M.create(request.body)
+  }
+```
+
+Melhorou? O numero de argumentos de uma funcao é o que chamamos de **aridade**. É muito importante em linguagens funcionas que classificam suas funcoes por sua aridade. No geral devemos sempre manter nossas funcoes bem explicitas sobre o que ela espera e o que ela retorna, para nao confundir que ira usa-las posteriormente.
+
+#### Composição
+
+Composição é uma propriedade muito importante das funcoes, é basicamente voce passar o resultado de uma funcao diretamente para outra, criado uma **cadeia** de execução. O ideal é que esse **pipeline** seja tao bem composto que para altera-lo basta voce inserir mais chamadas nele sem alterar a sua estrutura. Quando voce faz isso o seu codigo fica muito mais organizado.
+
+```elixir
+  # Retorna `{:ok, user_param}` para usuario aceito.
+  # Retorna `{:error, user_param}` para qualquer erro.
+  def check_receita(user_param), do: Receita.check_user(user_param)
+
+
+  # Retorna `{:ok, user}` para usuario criado com sucesso.
+  def create_user({:ok, user_param}), do: Model.create(user_param)
+  def create_user({:error, user_param} = error), do: error
+```
+
+Instanciando o nosso serviço de cadastro.
+
+```elixir
+  user_param
+  |> check_receita()
+  |> create_user()
+```
+
+O operador **|>** basicamente passa o que esta ao lado esquerdo como primeiro parametro para a funcao ao lado direito. Entao user_param é passado para check_receita e logo depois o resultado da operaçao é passado para create_user.
+
+Muito bem, mas agora precisamos adicionar uma checage de cpf. E agora?
+
+```elixir
+  user_param
+  |> check_receita()
+
+  cpf_check = check_cpf()
+
+  user = create_user()
+```
+
+Nao, nao e nao!
+Precisamos montar a nossa funcionalidade de checar cpf no mesmo scopo do nosso pipeline.
+
+```elixir
+  # Retorna `{:ok, user_param}` para usuario aceito.
+  # Retorna `{:error, user_param}` para qualquer erro.
+  def check_receita(user_param), do: Receita.check_user(user_param)
+
+  # Retorna `{:ok, user_param}` para usuario ok.
+  # Retorna `{:error, user_param}` para usuario com nome sujo.
+  def check_cpf({:ok, user_param}), do: CPF.check(user_param)
+
+  # Retorna `{:ok, user}` para usuario criado com sucesso.
+  def create_user({:ok, user_param}), do: Model.create(user_param)
+  def create_user({:error, user_param} = error), do: error
+```
+
+Agora observem que coisa linda!
+
+```elixir
+  user_param
+  |> Model.check_receita()
+  |> Model.check_cpf()
+  |> Model.create_user()
+```
+
+E isso valera para qualquer operaçao que precisarmos adicionar posteriormente, dessa forma mantendo o codigo consistente. Apenas adicionando mais funcionalidades a chance de quebrarmos o nosso código diminui.
+
+#### Funcoes Anonimas
+
+Funcoes anonimas sao funcoes nao nomeadas que estao presente na forma de variaveis.
+
+```javascript
+  const operation = (func, number) => {
+    func(number)
+  }
+```
+
+A funcao operation recebe uma funcao:
+
+```
+  operation((i) => 2 * i, 2)
+```
+
+O primeiro parametro dessa chamada é uma **funcao anonima**.
+Funcoes anonimas sao muito uteis para organizar o codigo e tambem nao **poluir** o scopo do script com funcoes que serao chamadas apenas em um lugar especifico. Colocar esse tipo de funcao muito especifica no scopo principal do seu codigo pode polui-lo, entao o recomendavel é criar uma funcao anonima dentro do scopo que ela sera empregada.
+
+#### Recursao
+
+Recursao é como tudo funciona, voce apenas nao ve!
+Recursao é o ato de chamar uma funcão dentro dela mesmo.
+
+```elixir
+  def factorial(n), do: factorial(n, n)
+
+  def factorial(n, n), do: factorial(n - 1, n * (n - 1))
+  
+  def factorial(1, acc), do: acc
+  
+  def factorial(n, acc) do
+    factorial(n - 1, n * acc)
+  end
+```
+
+Recursao tambem diz respeito a loop. Mas existe apenas um detalhe, **stacks** e **tail recursion**
+
+```elixir 
+  def double_all(n) do
+    2 * double_all(n - 1)
+  end
+
+  # 4?
+  double_all(2)
+```
+
+O codigo acima representa a cena de um crime e voce deveria ser preso!
+O fato de voce ter uma chamada recursiva em uma funcao e ainda precisar de seu retorno no bloco de cima da pilha, nao é nem um pouco otimizado e deixa o seu codigo mais lento, sem contar que voce corre o risco de **Stack Overflow**.
+
+```elixir
+  def double_all_tailrec(n, acc) do
+    double_all_tailrec(n - 1, acc * n)
+  end
+
+  def double_all_tailrec(1, acc), do: acc
+
+  # n = 2, acc = 2 => 2 * 2 = 4
+  # n = 1, acc = 4 => 4 * 1 = 4
+  dobule_all_tailrec(2, 2)
+```
+
+Para funcoes isso é tudo!
+
+## Orientacao a Objeto
+
+Orientacao é o paradigma predominante em programacao, entao vamos falar dos seus conceitos principais.
+
+### Classes
+
+Classes sao a estruturas de dados que nos possibilita trazer o dominio do problema da vida real pro codigo.
+
+```javascript
+  class Retangulo {
+    constructor(altura, largura) {
+      this.altura = altura;
+      this.largura = largura;
+    }
+  }
+```
+
+#### Acomplamento e Coesao
+
+```javascript
+  class FormaGeometrica {
+    constructor(vertices) {
+      this.vertices = vertices
+    }
+
+    calculate_2D_altura() {
+      // impl
+    }
+
+    calculate_2D_largura() {
+      // impl
+    }
+  }
+
+  class Formas2D extends FormaGeometrica {
+    altura() {
+      super.calculate_2D_altura()
+    }
+
+    largura() {
+      super.calculate_2D_largura()
+    }
+  }
+
+  class Retangulo extends Formas2D {
+    constructor(vertices) {
+      this.altura = super.altura()
+      this.largura = super.largura()
+    }
+  }
+```
+
+O codigo acima parece OK, porem vamos pensar um pouco.. **Se mudarmos algo na implementacao de FormaGeometrica, isso interefere em Formas2D ou em Retangulo?**
+
+Entao agora temos que ter muito cuidado quando alterarmos FormasGeometricas, e mais cuidado ainda se descermos mais ainda na hierarquia. Isso se chama **Acomplamento** e é algo bastante perigoso.
+
+Falando agora de coesão.
+Coesão se da atraves da definiçao da responsabilidade de determinada funcao/classe, geralmente atribuimos responsabilidade a efeitos colaterais. Quando a funcao realiza mais de uma tarefa em sua chamada, significa que ela tem baixa coesão e deveriamos separa-la em mais de uma para isolar-mos melhor os efeitos colaterais.
+
+Entao o ideal é, **baixo acoplamento com alta coesão**.
+
+### Interfaces
+
+Interface voce pode pensar como **Herança de tipos**. Veja no exemplo:
+
+```go
+  type pato interface {
+    TemAsa() bool
+    AndaComoPato() bool
+    FazQuack() bool
+  }
+
+  type Patinho struct {
+    Nome string
+  }
+
+  func (p * Patinho) TemAsa() bool {
+    return true
+  }
+
+  func (p * Patinho) AndaComoPato() bool {
+    return true
+  }
+
+  func (p * Patinho) FazQuack() bool {
+    return true
+  }
+
+  func QuackQuack(p * pato) {
+    if(p.AndaComoPato() && p.FazQuack() && p.TemAsa()) {
+      fmt.Println("Quack Quack")
+    } else {
+      fmt.Println("Nao sou um pato")
+    }
+  }
+  
+  func main() {
+    patito := Patinho{Nome: "Feio"}
+    QuackQuack(&patito) 
+  }
+```
+
+Quando voce falamos de interface podemos pensar em um modelo de **contratos**. Entao a interface _*pato*_ requisita que para assinar o seu contrato e herdar o seu tipo, a estrutura precisa implementar suas tres funcoes. Ocorrendo as implementacoes a estrutura herda o tipo _pato_. No caso acima _Patinho_ implementa as tres funcoes entao agora _Patinho_ tambem pode ser considerada um _pato_. Entao qualquer funcao que requisite um pato como parametro, poderemos passar _Patinho_. Agora imagine que tivessemos a classe _Cisne_ que tivesse:
+
+```go
+  type Patinho struct {
+    Nome string
+  }
+
+  func (p * Patinho) TemAsa() bool {
+    return true
+  }
+
+  func (p * Patinho) AndaComoPato() bool {
+    return true
+  }
+
+  func (p * Patinho) FazQuack() bool {
+    return false
+  }
+```
+
+**Cisne é um pato? Qual o retorno de QuackQuack()?**
+
+#### Poliformismo
+
+Poliformismo é quando uma funcao da classe herdada tem diferentes implementaçoes nas classes que estao herdando. Nao vou adentrar muito em poliformismo porque
+
+
+
+
+
+
+
