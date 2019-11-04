@@ -1,10 +1,8 @@
-## O B-A-BA da programação
+## O B-A-BA
 
 ### Funcoes
 
 Funcoes sao uma peça chave para realizar o ato de programar, e qualquer linguagem pode ser avaliada qualitativamente pelo jeito que emprega as funcões em sua estrutura.
-
-> f(x) = ax + b
 
 Funcoes podem ser:
 
