@@ -363,7 +363,7 @@ Entao perceba que o comportamento/resposta da nossa maquina se dara atraves da m
 #### Requisitos basicos
 
 - Definir 2 estados: ON e OFF
-- Apos algum comando inconsistente (Comando Ligar com estado ON) deve-se retornar uma mensagem de erro para o cliente e ignorar qualquer mensagem nos proximos 2 segundos
+- Apos algum comando inconsistente (Comando Ligar com estado ON) deve-se retornar uma mensagem de erro para o cliente
 - Garantir **thread safety**.
 - Apos decorrido o tempo definido em Duraion/0, a maquina deve atualizar o seu estado para _*OFF*_.
 
