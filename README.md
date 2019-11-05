@@ -230,6 +230,8 @@ O resulado foi esse aqui
 
 Valeu a pena?
 
+Orientacao a Objeto como tudo em programacao pode ser um tiro no pé.
+
 #### Acomplamento e Coesao
 
 ```javascript
