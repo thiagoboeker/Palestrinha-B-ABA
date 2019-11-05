@@ -218,6 +218,18 @@ Classe é a estrutura de dados que nos possibilita trazer o dominio do problema 
   }
 ```
 
+### Rabbit hole
+
+Voces conseguem me explicar o que eu fiz aqui?
+
+![](crud-generics.PNG)
+
+O resulado foi esse aqui
+
+![](crud-test.PNG)
+
+Valeu a pena?
+
 #### Acomplamento e Coesao
 
 ```javascript
